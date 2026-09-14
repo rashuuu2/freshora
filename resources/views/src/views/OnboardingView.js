@@ -11,7 +11,7 @@ import { styles } from './OnboardingView.styles';
 export default function OnboardingView({ navigation }) {
   const handleSkipOrNext = () => {
     if (navigation) {
-      navigation.replace('Users');
+      navigation.replace('Onboarding3');
     }
   };
 
@@ -25,7 +25,7 @@ export default function OnboardingView({ navigation }) {
           <Image
             source={require('../../assets/page2_full_artwork.png')}
             style={styles.fullArtworkImage}
-            resizeMode="cover"
+            resizeMode="contain"
           />
 
           {/* TOP RIGHT INTERACTIVE "SKIP" BUTTON */}
