@@ -19,14 +19,23 @@ export default function SplashScreen() {
         duration: 2200,
         useNativeDriver: false,
       }).start(({ finished }) => {
-        if (finished) {
-          setTimeout(animateProgress, 400);
+        if (finished && navigation) {
+          // Automatically transition to Page 2 Onboarding when splash finishes
+          setTimeout(() => {
+            navigation.replace('Onboarding');
+          }, 200);
         }
       });
     };
 
     animateProgress();
-  }, [progress]);
+  }, [navigation, progress]);
+
+  const handlePress = () => {
+    if (navigation) {
+      navigation.replace('Onboarding');
+    }
+  };
 
   const progressWidth = progress.interpolate({
     inputRange: [0, 1],
