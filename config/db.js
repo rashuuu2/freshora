@@ -18,7 +18,8 @@ const config = {
     database: process.env.DB_NAME || 'node_laravel_app',
     host: process.env.DB_HOST || '127.0.0.1',
     port: process.env.DB_PORT || 3306,
-    dialect: 'mysql',
+    dialect: process.env.DB_DIALECT || 'mysql',
+    storage: process.env.DB_STORAGE || './database.sqlite',
     logging: process.env.DB_LOGGING === 'true' ? console.log : false,
     pool: { max: 5, min: 0, acquire: 30000, idle: 10000 },
   },
@@ -28,7 +29,8 @@ const config = {
     database: process.env.DB_NAME_TEST || 'node_laravel_app_test',
     host: process.env.DB_HOST || '127.0.0.1',
     port: process.env.DB_PORT || 3306,
-    dialect: 'mysql',
+    dialect: process.env.DB_DIALECT || 'mysql',
+    storage: process.env.DB_STORAGE || './database_test.sqlite',
     logging: false,
   },
   production: {
@@ -37,7 +39,8 @@ const config = {
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
     port: process.env.DB_PORT || 3306,
-    dialect: 'mysql',
+    dialect: process.env.DB_DIALECT || 'mysql',
+    storage: process.env.DB_STORAGE || './database.sqlite',
     logging: false,
     pool: { max: 10, min: 2, acquire: 30000, idle: 10000 },
   },
@@ -46,22 +49,33 @@ const config = {
 const dbConfig = config[env];
 if (!dbConfig) throw new Error(`Unknown environment: ${env}`);
 
-export const sequelize = new Sequelize(
-  dbConfig.database,
-  dbConfig.username,
-  dbConfig.password,
-  {
-    host: dbConfig.host,
-    port: dbConfig.port,
-    dialect: dbConfig.dialect,
-    logging: dbConfig.logging,
-    pool: dbConfig.pool,
-    define: {
-      timestamps: true,
-      underscored: true,
-      freezeTableName: true,
-    },
-  }
-);
+export const sequelize = dbConfig.dialect === 'sqlite'
+  ? new Sequelize({
+      dialect: 'sqlite',
+      storage: dbConfig.storage,
+      logging: dbConfig.logging,
+      define: {
+        timestamps: true,
+        underscored: true,
+        freezeTableName: true,
+      },
+    })
+  : new Sequelize(
+      dbConfig.database,
+      dbConfig.username,
+      dbConfig.password,
+      {
+        host: dbConfig.host,
+        port: dbConfig.port,
+        dialect: dbConfig.dialect,
+        logging: dbConfig.logging,
+        pool: dbConfig.pool,
+        define: {
+          timestamps: true,
+          underscored: true,
+          freezeTableName: true,
+        },
+      }
+    );
 
 export default dbConfig;

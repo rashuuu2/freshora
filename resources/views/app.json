@@ -1,5 +1,8 @@
 {
   "android": {
     "package": "com.anonymous.views"
+  },
+  "web": {
+    "output": "single"
   }
 }

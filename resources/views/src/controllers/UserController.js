@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
-import userService from '../services/UserService';
+import userService from '../services/userService';
 import User from '../models/User';
 
 const PER_PAGE = 10;

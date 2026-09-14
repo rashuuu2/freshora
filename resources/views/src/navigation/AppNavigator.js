@@ -1,4 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import SplashScreen from '../views/SplashScreen';
 import UsersView from '../views/UsersView';
 
 const Stack = createNativeStackNavigator();
@@ -6,17 +7,21 @@ const Stack = createNativeStackNavigator();
 export default function AppNavigator() {
   return (
     <Stack.Navigator
+      initialRouteName="Splash"
       screenOptions={{
-        headerStyle: { backgroundColor: '#1a1a1a' },
-        headerTintColor: '#fff',
-        headerTitleStyle: { fontWeight: '600' },
-        contentStyle: { backgroundColor: '#f5f5f5' },
+        headerShown: false,
+        contentStyle: { backgroundColor: '#FEFBF2' },
       }}
     >
       <Stack.Screen
+        name="Splash"
+        component={SplashScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
         name="Users"
         component={UsersView}
-        options={{ title: 'Node + Express + React Native' }}
+        options={{ title: 'Node + Express + React Native', headerShown: true }}
       />
     </Stack.Navigator>
   );
