@@ -40,9 +40,9 @@ export default function OnboardingPage6View({ navigation }) {
   const handleLoginSubmit = () => {
     if (navigation) {
       if (typeof navigation.navigate === 'function') {
-        navigation.navigate('Users');
+        navigation.navigate('Onboarding7');
       } else if (typeof navigation.replace === 'function') {
-        navigation.replace('Users');
+        navigation.replace('Onboarding7');
       }
     }
   };
