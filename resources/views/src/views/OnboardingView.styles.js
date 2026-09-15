@@ -34,23 +34,24 @@ export const styles = StyleSheet.create({
   /* Invisible Clickable Skip Area (Top Right) */
   skipClickArea: {
     position: 'absolute',
-    top: 10,
-    right: 10,
-    width: 80,
-    height: 50,
-    zIndex: 20,
+    top: 0,
+    right: 0,
+    width: 100,
+    height: 70,
+    zIndex: 9999,
     cursor: 'pointer',
   },
 
   /* Invisible Clickable Next Arrow Button Area (Bottom Right) */
   nextClickArea: {
     position: 'absolute',
-    bottom: 15,
-    right: 15,
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    zIndex: 20,
+    bottom: 0,
+    right: 0,
+    width: '45%',
+    height: '22%',
+    minWidth: 140,
+    minHeight: 140,
+    zIndex: 9999,
     cursor: 'pointer',
   },
 });

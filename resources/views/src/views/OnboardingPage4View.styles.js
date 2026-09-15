@@ -26,7 +26,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     maxWidth: 480,
-    aspectRatio: 856 / 1837,
+    aspectRatio: 889 / 1769,
     backgroundColor: '#FAF7F2',
     position: 'relative',
     alignSelf: 'center',
@@ -61,16 +61,16 @@ export const styles = StyleSheet.create({
     cursor: 'pointer',
   },
 
-  /* CONTENT OVERLAY CONTAINER (Positioned safely in upper cream region) */
+  /* CONTENT OVERLAY CONTAINER (Safely constrained to upper left cream region) */
   contentContainer: {
     position: 'absolute',
-    top: '5%',
+    top: '5.5%',
     left: '6.5%',
     width: '52%',
     zIndex: 20,
   },
 
-  /* TOP LEFT CATEGORY LABEL: SAVE TIME (PAGE 2 TYPOGRAPHY MASTER SYSTEM) */
+  /* TOP LEFT CATEGORY LABEL: YOU'RE ALL SET (PAGE 2 TYPOGRAPHY MASTER SYSTEM) */
   categoryLabel: {
     fontFamily,
     color: '#296E3E',
@@ -84,9 +84,9 @@ export const styles = StyleSheet.create({
   /* MAIN HEADLINE (PAGE 2 TYPOGRAPHY MASTER SYSTEM) */
   headline: {
     fontFamily,
-    fontSize: 20,
+    fontSize: 21,
     fontWeight: '900',
-    lineHeight: 24,
+    lineHeight: 25,
     letterSpacing: -0.3,
     marginBottom: 6,
     textAlign: 'left',

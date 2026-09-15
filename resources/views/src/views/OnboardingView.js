@@ -9,9 +9,23 @@ import {
 import { styles } from './OnboardingView.styles';
 
 export default function OnboardingView({ navigation }) {
-  const handleSkipOrNext = () => {
+  const handleNext = () => {
     if (navigation) {
-      navigation.replace('Onboarding3');
+      if (typeof navigation.navigate === 'function') {
+        navigation.navigate('Onboarding3');
+      } else if (typeof navigation.replace === 'function') {
+        navigation.replace('Onboarding3');
+      }
+    }
+  };
+
+  const handleSkip = () => {
+    if (navigation) {
+      if (typeof navigation.navigate === 'function') {
+        navigation.navigate('Users');
+      } else if (typeof navigation.replace === 'function') {
+        navigation.replace('Users');
+      }
     }
   };
 
@@ -31,14 +45,14 @@ export default function OnboardingView({ navigation }) {
           {/* TOP RIGHT INTERACTIVE "SKIP" BUTTON */}
           <TouchableOpacity
             style={styles.skipClickArea}
-            onPress={handleSkipOrNext}
+            onPress={handleSkip}
             activeOpacity={0.6}
           />
 
           {/* BOTTOM RIGHT INTERACTIVE NEXT ARROW CIRCULAR BUTTON */}
           <TouchableOpacity
             style={styles.nextClickArea}
-            onPress={handleSkipOrNext}
+            onPress={handleNext}
             activeOpacity={0.6}
           />
 
