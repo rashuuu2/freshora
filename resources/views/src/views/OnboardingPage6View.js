@@ -8,57 +8,92 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
-  Platform,
 } from 'react-native';
 import Svg, { Path, Circle, Rect } from 'react-native-svg';
-import { styles } from './OnboardingPage5View.styles';
+import { styles } from './OnboardingPage6View.styles';
 
-export default function OnboardingPage5View({ navigation }) {
-  const [fullName, setFullName] = useState('');
+export default function OnboardingPage6View({ navigation }) {
   const [mobileNumber, setMobileNumber] = useState('');
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [agreeTerms, setAgreeTerms] = useState(true);
 
-  const handleCreateAccount = () => {
+  const handleBack = () => {
     if (navigation) {
-      if (typeof navigation.navigate === 'function') {
-        navigation.navigate('Onboarding6');
-      } else if (typeof navigation.replace === 'function') {
-        navigation.replace('Onboarding6');
+      if (typeof navigation.goBack === 'function') {
+        navigation.goBack();
+      } else if (typeof navigation.navigate === 'function') {
+        navigation.navigate('Onboarding5');
       }
     }
   };
 
-
-  const handleLoginNav = () => {
+  const handleSignUpNav = () => {
     if (navigation) {
       if (typeof navigation.navigate === 'function') {
-        navigation.navigate('Onboarding6');
+        navigation.navigate('Onboarding5');
       } else if (typeof navigation.replace === 'function') {
-        navigation.replace('Onboarding6');
+        navigation.replace('Onboarding5');
       }
     }
   };
 
+  const handleLoginSubmit = () => {
+    if (navigation) {
+      if (typeof navigation.navigate === 'function') {
+        navigation.navigate('Users');
+      } else if (typeof navigation.replace === 'function') {
+        navigation.replace('Users');
+      }
+    }
+  };
+
+  const handleForgotPassword = () => {
+    if (navigation) {
+      if (typeof navigation.navigate === 'function') {
+        navigation.navigate('Users');
+      }
+    }
+  };
 
   return (
     <SafeAreaView style={styles.outerSafeArea}>
-      <StatusBar barStyle="dark-content" backgroundColor="#D6EBD8" hidden={true} />
+      <StatusBar barStyle="dark-content" backgroundColor="#FAF7F2" hidden={true} />
       <View style={styles.screenContainer}>
         <View style={styles.mobileCanvas}>
 
-          {/* TOP SECTION: EXISTING BACKGROUND IMAGE */}
+          {/* TOP SECTION: LOCKED HERO BACKGROUND IMAGE ASSET */}
           <View style={styles.topImageContainer}>
             <Image
-              source={require('../../assets/page5_full_artwork.png')}
+              source={require('../../assets/page6_full_artwork.png')}
               style={styles.backgroundImage}
               resizeMode="cover"
             />
           </View>
 
-          {/* OVERLAPPING WHITE ACCOUNT PANEL */}
+          {/* TOP HEADER BAR: TOP-LEFT BACK CHEVRON & TOP-RIGHT SIGN UP */}
+          <View style={styles.topHeaderBar}>
+            <TouchableOpacity
+              style={styles.topBackIconArea}
+              onPress={handleBack}
+              activeOpacity={0.7}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            >
+              <Svg width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="#1B753A" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                <Path d="M15 18l-6-6 6-6" />
+              </Svg>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.topSignUpArea}
+              onPress={handleSignUpNav}
+              activeOpacity={0.7}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            >
+              <Text style={styles.topSignUpText}>Sign Up</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* OVERLAPPING WHITE LOGIN PANEL (STARTS LOWER AT 260PX TO MATCH REFERENCE) */}
           <View style={styles.whitePanel}>
             <ScrollView
               contentContainerStyle={styles.scrollContent}
@@ -66,39 +101,23 @@ export default function OnboardingPage5View({ navigation }) {
               bounces={false}
             >
 
-              {/* 5. CREATE ACCOUNT LABEL */}
-              <Text style={styles.categoryLabel}>CREATE ACCOUNT</Text>
+              {/* WELCOME BACK LABEL */}
+              <Text style={styles.categoryLabel}>WELCOME BACK</Text>
 
-              {/* 6. MAIN HEADING */}
+              {/* MAIN HEADING */}
               <Text style={styles.heading}>
-                <Text style={styles.darkHeading}>Let's get you{"\n"}</Text>
-                <Text style={styles.limeHeading}>started</Text>
+                <Text style={styles.darkHeading}>Log in to{"\n"}</Text>
+                <Text style={styles.limeHeading}>continue</Text>
               </Text>
 
-              {/* 7. DESCRIPTION */}
+              {/* DESCRIPTION PARAGRAPH */}
               <Text style={styles.description}>
-                Create an account to enjoy fresh groceries,{"\n"}
-                fast delivery and a healthier, happier you.
+                Access your account to order your{"\n"}
+                favourite groceries, track deliveries{"\n"}
+                and more.
               </Text>
 
-              {/* 8. FULL NAME INPUT */}
-              <View style={styles.inputContainer}>
-                <View style={styles.inputIconLeft}>
-                  <Svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="#6B7280" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                    <Path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                    <Circle cx={12} cy={7} r={4} />
-                  </Svg>
-                </View>
-                <TextInput
-                  style={styles.textInput}
-                  placeholder="Full Name"
-                  placeholderTextColor="#9CA3AF"
-                  value={fullName}
-                  onChangeText={setFullName}
-                />
-              </View>
-
-              {/* 9. MOBILE NUMBER INPUT */}
+              {/* MOBILE NUMBER INPUT */}
               <View style={styles.inputContainer}>
                 <View style={styles.inputIconLeft}>
                   <Svg width={15} height={15} viewBox="0 0 24 24" fill="none" stroke="#6B7280" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
@@ -128,26 +147,7 @@ export default function OnboardingPage5View({ navigation }) {
                 />
               </View>
 
-              {/* 10. EMAIL INPUT */}
-              <View style={styles.inputContainer}>
-                <View style={styles.inputIconLeft}>
-                  <Svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="#6B7280" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                    <Path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                    <Path d="m22 6-10 7L2 6" />
-                  </Svg>
-                </View>
-                <TextInput
-                  style={styles.textInput}
-                  placeholder="Email Address (Optional)"
-                  placeholderTextColor="#9CA3AF"
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  value={email}
-                  onChangeText={setEmail}
-                />
-              </View>
-
-              {/* 11. PASSWORD INPUT WITH EYE TOGGLE */}
+              {/* PASSWORD INPUT WITH EYE TOGGLE */}
               <View style={styles.inputContainer}>
                 <View style={styles.inputIconLeft}>
                   <Svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="#6B7280" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
@@ -157,7 +157,7 @@ export default function OnboardingPage5View({ navigation }) {
                 </View>
                 <TextInput
                   style={styles.textInput}
-                  placeholder="Create Password"
+                  placeholder="Password"
                   placeholderTextColor="#9CA3AF"
                   secureTextEntry={!showPassword}
                   value={password}
@@ -182,51 +182,35 @@ export default function OnboardingPage5View({ navigation }) {
                 </TouchableOpacity>
               </View>
 
-              {/* 12. PASSWORD REQUIREMENT TEXT */}
-              <Text style={styles.passwordHelperText}>
-                Use at least 8 characters with a mix of letters, numbers and a symbol.
-              </Text>
-
-              {/* 13. TERMS CHECKBOX */}
+              {/* FORGOT PASSWORD LINK */}
               <TouchableOpacity
-                style={styles.termsRow}
-                onPress={() => setAgreeTerms(!agreeTerms)}
-                activeOpacity={0.8}
+                style={styles.forgotPasswordRow}
+                onPress={handleForgotPassword}
+                activeOpacity={0.7}
               >
-                <View style={[styles.checkboxSquare, agreeTerms && styles.checkboxSquareChecked]}>
-                  {agreeTerms && (
-                    <Svg width={11} height={11} viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth={3.5} strokeLinecap="round" strokeLinejoin="round">
-                      <Path d="M20 6L9 17l-5-5" />
-                    </Svg>
-                  )}
-                </View>
-                <Text style={styles.termsText}>
-                  I agree to the{' '}
-                  <Text style={styles.termsLink}>Terms of Service</Text> and{' '}
-                  <Text style={styles.termsLink}>Privacy Policy</Text>
-                </Text>
+                <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
               </TouchableOpacity>
 
-              {/* 14. CREATE ACCOUNT BUTTON */}
+              {/* LOG IN BUTTON */}
               <TouchableOpacity
-                style={styles.createAccountBtn}
-                onPress={handleCreateAccount}
+                style={styles.loginBtn}
+                onPress={handleLoginSubmit}
                 activeOpacity={0.85}
               >
-                <Text style={styles.createAccountBtnText}>Create Account</Text>
+                <Text style={styles.loginBtnText}>Log In</Text>
                 <Svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: 8 }}>
                   <Path d="M5 12h14M12 5l7 7-7 7" />
                 </Svg>
               </TouchableOpacity>
 
-              {/* 15. OR CONTINUE WITH DIVIDER */}
+              {/* OR CONTINUE WITH DIVIDER */}
               <View style={styles.dividerRow}>
                 <View style={styles.dividerLine} />
                 <Text style={styles.dividerText}>OR CONTINUE WITH</Text>
                 <View style={styles.dividerLine} />
               </View>
 
-              {/* 16. SOCIAL LOGIN BUTTONS */}
+              {/* SOCIAL LOGIN BUTTONS */}
               <View style={styles.socialButtonsRow}>
 
                 {/* GOOGLE BUTTON */}
@@ -251,27 +235,27 @@ export default function OnboardingPage5View({ navigation }) {
                 {/* WHATSAPP BUTTON */}
                 <TouchableOpacity style={styles.socialBtn} activeOpacity={0.7}>
                   <Svg width={16} height={16} viewBox="0 0 24 24" fill="#25D366">
-                    <Path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l.279.444-1.16 4.238 4.341-1.138.448.278zm10.741-6.52c-.097-.163-.357-.261-.747-.455-.39-.195-2.309-1.139-2.666-1.269-.357-.13-.618-.195-.878.195-.26.39-.974 1.269-1.196 1.529-.222.26-.444.293-.834.098-.39-.195-1.646-.607-3.136-1.935-1.159-1.034-1.942-2.312-2.17-2.702-.228-.39-.024-.601.171-.795.176-.175.39-.455.585-.683.195-.228.26-.39.39-.651.13-.261.065-.489-.033-.684-.097-.195-.878-2.115-1.204-2.898-.317-.763-.64-.66-.878-.672-.228-.012-.489-.014-.75-.014-.26 0-.684.097-1.04.489-.357.391-1.366 1.336-1.366 3.257 0 1.921 1.399 3.778 1.594 4.039.195.26 2.753 4.204 6.67 5.894.931.402 1.658.642 2.224.823.935.298 1.787.256 2.46.155.751-.113 2.309-.944 2.634-1.856.325-.912.325-1.692.228-1.855z" />
+                    <Path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.893 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l.279.444-1.16 4.238 4.341-1.138.448.278zm10.741-6.52c-.097-.163-.357-.261-.747-.455-.39-.195-2.309-1.139-2.666-1.269-.357-.13-.618-.195-.878.195-.26.39-.974 1.269-1.196 1.529-.222.26-.444.293-.834.098-.39-.195-1.646-.607-3.136-1.935-1.159-1.034-1.942-2.312-2.17-2.702-.228-.39-.024-.601.171-.795.176-.175.39-.455.585-.683.195-.228.26-.39.39-.651.13-.261.065-.489-.033-.684-.097-.195-.878-2.115-1.204-2.898-.317-.763-.64-.66-.878-.672-.228-.012-.489-.014-.75-.014-.26 0-.684.097-1.04.489-.357.391-1.366 1.336-1.366 3.257 0 1.921 1.399 3.778 1.594 4.039.195.26 2.753 4.204 6.67 5.894.931.402 1.658.642 2.224.823.935.298 1.787.256 2.46.155.751-.113 2.309-.944 2.634-1.856.325-.912.325-1.692.228-1.855z" />
                   </Svg>
                   <Text style={styles.socialBtnText}>WhatsApp</Text>
                 </TouchableOpacity>
 
               </View>
 
-              {/* 17. LOGIN TEXT */}
+              {/* BOTTOM NEW HERE? CREATE AN ACCOUNT ROW */}
               <TouchableOpacity
-                style={styles.loginRow}
-                onPress={handleLoginNav}
+                style={styles.signUpBottomRow}
+                onPress={handleSignUpNav}
                 activeOpacity={0.7}
               >
-                <Text style={styles.loginTextGray}>Already have an account? </Text>
-                <Text style={styles.loginTextGreen}>Log In </Text>
+                <Text style={styles.signUpBottomTextGray}>Don't have an account? </Text>
+                <Text style={styles.signUpBottomTextGreen}>Sign Up </Text>
                 <Svg width={13} height={13} viewBox="0 0 24 24" fill="none" stroke="#1B753A" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
                   <Path d="M5 12h14M12 5l7 7-7 7" />
                 </Svg>
               </TouchableOpacity>
 
-              {/* 18. BOTTOM SAFE AREA BOTTOM SPACING */}
+              {/* BOTTOM SAFE AREA SPACER */}
               <View style={styles.bottomSpacer} />
 
             </ScrollView>
