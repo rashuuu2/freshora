@@ -6,14 +6,18 @@ import {
   SafeAreaView,
   StatusBar,
   TouchableOpacity,
+  Pressable,
   TextInput,
   ScrollView,
+  Alert,
+  Linking,
 } from 'react-native';
 import Svg, { Path, Rect, Circle, Line } from 'react-native-svg';
 import { styles } from './OnboardingPage7View.styles';
 
 export default function OnboardingPage7View({ navigation }) {
   const [searchQuery, setSearchQuery] = useState('');
+  const [email, setEmail] = useState('');
 
   const handleLocationPress = () => {
     // Location picker handler
@@ -30,6 +34,58 @@ export default function OnboardingPage7View({ navigation }) {
       }
     }
   };
+
+  const handleSubscribePress = () => {
+    const trimmedEmail = email ? email.trim() : '';
+    if (!trimmedEmail) {
+      const msg = 'Please enter your email address to subscribe!';
+      if (typeof window !== 'undefined' && window.alert) {
+        window.alert(msg);
+      } else {
+        Alert.alert('Subscription', msg);
+      }
+      return;
+    }
+    const successMsg = `Thank you for subscribing with: ${trimmedEmail}`;
+    if (typeof window !== 'undefined' && window.alert) {
+      window.alert(successMsg);
+    } else {
+      Alert.alert('Subscribed!', successMsg);
+    }
+    setEmail('');
+  };
+
+  const handleOpenURL = async (url, fallbackTitle, fallbackMsg) => {
+    try {
+      const supported = await Linking.canOpenURL(url);
+      if (supported) {
+        await Linking.openURL(url);
+      } else {
+        if (typeof window !== 'undefined' && window.alert) {
+          window.alert(`${fallbackTitle}: ${fallbackMsg}`);
+        } else {
+          Alert.alert(fallbackTitle, fallbackMsg);
+        }
+      }
+    } catch (e) {
+      if (typeof window !== 'undefined' && window.alert) {
+        window.alert(`${fallbackTitle}: ${fallbackMsg}`);
+      } else {
+        Alert.alert(fallbackTitle, fallbackMsg);
+      }
+    }
+  };
+
+  const handleGooglePlay = () => handleOpenURL('https://play.google.com/store/apps', 'Google Play', 'Redirecting to Google Play Store...');
+  const handleAppStore = () => handleOpenURL('https://www.apple.com/app-store/', 'App Store', 'Redirecting to Apple App Store...');
+  const handleAboutUs = () => handleOpenURL('https://freshora.com/about', 'About Us', 'Freshora is your premier fresh grocery delivery platform.');
+  const handleHelpSupport = () => handleOpenURL('https://freshora.com/help', 'Help & Support', 'Customer Support: support@freshora.com');
+  const handleTerms = () => handleOpenURL('https://freshora.com/terms', 'Terms & Conditions', 'Freshora Terms & Conditions of Service.');
+  const handlePrivacy = () => handleOpenURL('https://freshora.com/privacy', 'Privacy Policy', 'Freshora Privacy Policy & Data Protection.');
+  const handleFacebook = () => handleOpenURL('https://facebook.com', 'Facebook', 'Freshora on Facebook');
+  const handleInstagram = () => handleOpenURL('https://instagram.com', 'Instagram', 'Freshora on Instagram');
+  const handleYouTube = () => handleOpenURL('https://youtube.com', 'YouTube', 'Freshora on YouTube');
+  const handleLinkedIn = () => handleOpenURL('https://linkedin.com', 'LinkedIn', 'Freshora on LinkedIn');
 
   return (
     <SafeAreaView style={styles.outerSafeArea}>
@@ -1087,7 +1143,7 @@ export default function OnboardingPage7View({ navigation }) {
                 <Image
                   source={require('../../assets/banner_greener.png')}
                   style={styles.greenerBannerImage}
-                  resizeMode="contain"
+                  resizeMode="cover"
                 />
               </TouchableOpacity>
             </View>
@@ -1196,33 +1252,241 @@ export default function OnboardingPage7View({ navigation }) {
               </View>
             </View>
 
-
-            {/* === FRESH CHOICES BRIGHTER TOMORROWS PROMO BANNER === */}
-            <TouchableOpacity
-              style={styles.freshChoicesBannerContainer}
-              activeOpacity={0.92}
-              onPress={handleShopNowPress}
-            >
+            {/* === UPPER PROMOTIONAL BANNER (ASSET BG + CODE OVERLAY UI) === */}
+            <View style={styles.freshChoicesBannerContainer}>
               <Image
-                source={require('../../assets/banner_freshchoices_full.png')}
-                style={styles.freshChoicesBannerImage}
-                resizeMode="contain"
+                source={require('../../assets/promotional/fresh-choices-bg.png')}
+                style={styles.bannerBgImage}
+                resizeMode="cover"
+                pointerEvents="none"
               />
-            </TouchableOpacity>
+              <View style={styles.bannerContentOverlay}>
+                <View style={styles.bannerLeftContent}>
+                  <Text style={styles.bannerHeadingMain}>Fresh Choices</Text>
+                  <Text style={styles.bannerHeadingSub}>Brighter Tomorrows</Text>
+                  <Text style={styles.bannerDescText}>
+                    Good food today. A healthier{'\n'}tomorrow.
+                  </Text>
+                  <TouchableOpacity
+                    style={styles.bannerCtaBtn}
+                    activeOpacity={0.85}
+                    onPress={handleShopNowPress}
+                  >
+                    <Text style={styles.bannerCtaBtnText}>Shop Now →</Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.bannerRightScriptContent}>
+                  <Text style={styles.scriptTextLine}>Eat</Text>
+                  <Text style={styles.scriptTextLine}>Good</Text>
+                  <Text style={styles.scriptTextLine}>Live</Text>
+                  <Text style={styles.scriptTextLine}>Better ♥</Text>
+                </View>
+              </View>
+            </View>
 
 
-            {/* === STAY UPDATED NEWSLETTER BANNER === */}
-            <TouchableOpacity
-              style={styles.stayUpdatedBannerContainer}
-              activeOpacity={0.92}
-              onPress={handleShopNowPress}
-            >
+            {/* === LOWER NEWSLETTER BANNER (ASSET BG + CODE OVERLAY UI) === */}
+            <View style={styles.stayUpdatedBannerContainer}>
               <Image
-                source={require('../../assets/banner_stayupdated_full.png')}
-                style={styles.stayUpdatedBannerImage}
-                resizeMode="contain"
+                source={require('../../assets/promotional/stay-updated-bg.png')}
+                style={styles.bannerBgImage}
+                resizeMode="cover"
+                pointerEvents="none"
               />
-            </TouchableOpacity>
+              <View style={styles.bannerContentOverlay}>
+                <View style={styles.newsletterLeftCol}>
+                  <View style={styles.newsletterHeaderRow}>
+                    <View style={styles.mailIconCircle}>
+                      <Svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="#0B4A2D" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                        <Path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                        <Path d="M22 6l-10 7L2 6" />
+                      </Svg>
+                    </View>
+                    <View style={styles.newsletterHeaderTexts}>
+                      <Text style={styles.newsletterHeadingText}>Stay Updated</Text>
+                      <Text style={styles.newsletterSubText}>
+                        Get latest offers, new arrivals and{'\n'}healthy living tips.
+                      </Text>
+                    </View>
+                  </View>
+
+                  <View style={styles.newsletterControlsRow}>
+                    <View style={styles.newsletterInputWrapper}>
+                      <TextInput
+                        style={styles.newsletterTextInput}
+                        placeholder="Enter your email address"
+                        placeholderTextColor="#94A3B8"
+                        value={email}
+                        onChangeText={setEmail}
+                        keyboardType="email-address"
+                        autoCapitalize="none"
+                      />
+                    </View>
+                    <TouchableOpacity
+                      style={styles.subscribeCtaBtn}
+                      activeOpacity={0.85}
+                      onPress={handleSubscribePress}
+                    >
+                      <Text style={styles.subscribeCtaBtnText}>Subscribe →</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                <View style={styles.newsletterRightScriptCol}>
+                  <Text style={styles.scriptTextLine}>Good</Text>
+                  <Text style={styles.scriptTextLine}>Things</Text>
+                  <Text style={styles.scriptTextLine}>In Your</Text>
+                  <Text style={styles.scriptTextLine}>Inbox ♥</Text>
+                </View>
+              </View>
+            </View>
+
+            {/* === GET OUR APP & FOOTER SECTION === */}
+            <View style={styles.getAppFooterSectionContainer}>
+              {/* DECORATIVE BACKGROUND ARTWORK (PHONE + LEAVES ARTWORK ONLY - NO TEXT) */}
+              <Image
+                source={require('../../assets/promotional/get_our_app_bg.jpg')}
+                style={styles.getAppBgImage}
+                resizeMode="cover"
+                pointerEvents="none"
+              />
+
+              {/* 1. TOP CONTENT ROW: TEXT + STORE BUTTONS */}
+              <View style={styles.getAppTopSection}>
+                <View style={styles.getAppLeftCol}>
+                  <Text style={styles.getAppTitleText}>Get Our App</Text>
+                  <Text style={styles.getAppDescText}>
+                    Shop faster, track orders and get exclusive app-only offers.
+                  </Text>
+
+                  {/* STORE BUTTONS COLUMN (VERTICAL STACK) */}
+                  <View style={styles.storeButtonsCol}>
+                    {/* GOOGLE PLAY BUTTON */}
+                    <Pressable
+                      style={({ pressed }) => [styles.appStoreBtn, pressed && styles.btnPressed]}
+                      onPress={handleGooglePlay}
+                      accessibilityRole="button"
+                      accessibilityLabel="Get it on Google Play"
+                    >
+                      {/* Google Play Tri-color SVG Logo */}
+                      <Svg width={20} height={20} viewBox="0 0 512 512" style={{ marginRight: 8 }}>
+                        <Path fill="#410593" d="M72 40l224 216L72 472V40z" />
+                        <Path fill="#00e472" d="M72 40l224 216L72 40z" />
+                        <Path fill="#ffd200" d="M296 256l68-68-220-144 152 212z" />
+                        <Path fill="#ff3a44" d="M296 256l152 212-220-144 68-68z" />
+                        <Path fill="#00e472" d="M72 40l224 216-76 40L72 40z" />
+                        <Path fill="#ff3a44" d="M72 472l148-256 76 40L72 472z" />
+                        <Path fill="#00d2ff" d="M72 40l224 216L72 472V40z" />
+                      </Svg>
+                      <View style={styles.storeBtnTextCol}>
+                        <Text style={styles.storeBtnSubtext}>GET IT ON</Text>
+                        <Text style={styles.storeBtnTitleText}>Google Play</Text>
+                      </View>
+                    </Pressable>
+
+                    {/* APP STORE BUTTON */}
+                    <Pressable
+                      style={({ pressed }) => [styles.appStoreBtn, pressed && styles.btnPressed]}
+                      onPress={handleAppStore}
+                      accessibilityRole="button"
+                      accessibilityLabel="Download on the App Store"
+                    >
+                      {/* Apple SVG Logo */}
+                      <Svg width={20} height={20} viewBox="0 0 170 170" fill="#000000" style={{ marginRight: 8 }}>
+                        <Path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.91.13-9.77-1.9-14.57-6.09-3.32-2.87-7.23-7.6-11.74-14.19-6.09-8.89-10.76-18.72-14.02-29.48-3.26-10.77-4.89-21.24-4.89-31.42 0-14.28 3.56-26.04 10.68-35.28 7.12-9.24 16.03-13.97 26.73-14.19 5.09 0 10.51 1.25 16.27 3.75 5.76 2.5 9.77 3.76 12.04 3.76 1.76 0 5.92-1.31 12.48-3.92 6.56-2.61 11.83-3.8 15.82-3.57 11.82.72 21.05 4.97 27.69 12.74-10.52 6.37-15.67 15.19-15.45 26.46.22 8.79 3.59 16.14 10.11 22.05 6.52 5.91 14.3 9.4 23.34 10.47-2.39 7.02-5.71 14.15-9.96 21.39zM119.22 31.95c0-6.93 2.53-13.57 7.59-19.92 5.06-6.35 11.45-10.4 19.17-12.15.54 1.2.81 2.45.81 3.75 0 6.84-2.58 13.52-7.74 20.04-5.16 6.52-11.47 10.51-18.93 11.97-.32-1.2-.48-2.43-.48-3.69z" />
+                      </Svg>
+                      <View style={styles.storeBtnTextCol}>
+                        <Text style={styles.storeBtnSubtext}>Download on the</Text>
+                        <Text style={styles.storeBtnTitleText}>App Store</Text>
+                      </View>
+                    </Pressable>
+                  </View>
+                </View>
+              </View>
+
+              {/* 2. FULL WIDTH DIVIDER LINE */}
+              <View style={styles.footerDividerLine} />
+
+              {/* 3. FOOTER LINKS ROW */}
+              <View style={styles.footerLinksRow}>
+                <Pressable onPress={handleAboutUs} accessibilityRole="link" accessibilityLabel="About Us">
+                  <Text style={styles.footerLinkText}>About Us</Text>
+                </Pressable>
+                <Text style={styles.footerLinkSeparator}>|</Text>
+
+                <Pressable onPress={handleHelpSupport} accessibilityRole="link" accessibilityLabel="Help & Support">
+                  <Text style={styles.footerLinkText}>Help & Support</Text>
+                </Pressable>
+                <Text style={styles.footerLinkSeparator}>|</Text>
+
+                <Pressable onPress={handleTerms} accessibilityRole="link" accessibilityLabel="Terms & Conditions">
+                  <Text style={styles.footerLinkText}>Terms & Conditions</Text>
+                </Pressable>
+                <Text style={styles.footerLinkSeparator}>|</Text>
+
+                <Pressable onPress={handlePrivacy} accessibilityRole="link" accessibilityLabel="Privacy Policy">
+                  <Text style={styles.footerLinkText}>Privacy Policy</Text>
+                </Pressable>
+              </View>
+
+              {/* 4. SOCIAL MEDIA ICONS ROW */}
+              <View style={styles.socialIconsRow}>
+                {/* FACEBOOK */}
+                <Pressable
+                  style={({ pressed }) => [styles.socialIconCircle, pressed && styles.btnPressed]}
+                  onPress={handleFacebook}
+                  accessibilityRole="link"
+                  accessibilityLabel="Facebook"
+                >
+                  <Svg width={18} height={18} viewBox="0 0 24 24" fill="#334155">
+                    <Path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
+                  </Svg>
+                </Pressable>
+
+                {/* INSTAGRAM */}
+                <Pressable
+                  style={({ pressed }) => [styles.socialIconCircle, pressed && styles.btnPressed]}
+                  onPress={handleInstagram}
+                  accessibilityRole="link"
+                  accessibilityLabel="Instagram"
+                >
+                  <Svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="#334155" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                    <Rect x={2} y={2} width={20} height={20} rx={5} ry={5} />
+                    <Path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
+                    <Line x1={17.5} y1={6.5} x2={17.51} y2={6.5} />
+                  </Svg>
+                </Pressable>
+
+                {/* YOUTUBE */}
+                <Pressable
+                  style={({ pressed }) => [styles.socialIconCircle, pressed && styles.btnPressed]}
+                  onPress={handleYouTube}
+                  accessibilityRole="link"
+                  accessibilityLabel="YouTube"
+                >
+                  <Svg width={18} height={18} viewBox="0 0 24 24" fill="#334155">
+                    <Path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.25 29 29 0 00-.46-5.33zM9.75 15.02V8.48l5.75 3.27-5.75 3.27z" />
+                  </Svg>
+                </Pressable>
+
+                {/* LINKEDIN */}
+                <Pressable
+                  style={({ pressed }) => [styles.socialIconCircle, pressed && styles.btnPressed]}
+                  onPress={handleLinkedIn}
+                  accessibilityRole="link"
+                  accessibilityLabel="LinkedIn"
+                >
+                  <Svg width={18} height={18} viewBox="0 0 24 24" fill="#334155">
+                    <Path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z" />
+                    <Circle cx={4} cy={4} r={2} />
+                  </Svg>
+                </Pressable>
+              </View>
+
+              {/* 5. BOTTOM COPYRIGHT & TAGLINE */}
+              <Text style={styles.copyrightText}>© 2024. All rights reserved.</Text>
+              <Text style={styles.bottomTaglineText}>A healthier you, a brighter tomorrow. ♡</Text>
+            </View>
 
           </ScrollView>
 
